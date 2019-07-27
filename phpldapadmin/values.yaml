@@ -3,7 +3,7 @@ image:
   version: 0.7.2
 
 LDAP:
-  host: ldap://logmanage-openldap:389
+  host: ldap://<helm name>-openldap:389
 
 limits:
   cpu: 100m
