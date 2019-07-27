@@ -53,7 +53,7 @@ service:
 # Default configuration for openldap as environment variables. These get injected directly in the container.
 # Use the env variables from https://github.com/osixia/docker-openldap#beginner-guide
 env:
-  LDAP_ORGANISATION: "TradingFoe Inc."
+  LDAP_ORGANISATION: "CompanyName Inc."
   LDAP_DOMAIN: "example.org"
   LDAP_BACKEND: "hdb"
   LDAP_TLS: "true"
