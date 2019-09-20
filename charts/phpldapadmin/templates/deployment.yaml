@@ -1,0 +1,66 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "phpldapadmin.fullname" . }}
+  labels:
+    app: {{ template "phpldapadmin.name" . }}
+    chart: {{ template "phpldapadmin.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+{{- if .Values.strategy }}
+  strategy:
+{{ toYaml .Values.strategy | indent 4 }}
+{{- end }}
+  selector:
+    matchLabels:
+      app: {{ template "phpldapadmin.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "phpldapadmin.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PHPLDAPADMIN_LDAP_HOSTS
+              value: {{ .Values.ldap.host }}
+            - name: PHPLDAPADMIN_HTTPS
+              value: 'false'
+          ports:
+            - name: http
+              containerPort: 80
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 10
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 10
+          resources:
+            limits:
+              cpu: {{ .Values.limits.cpu }}
+              memory: {{ .Values.limits.memory }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+

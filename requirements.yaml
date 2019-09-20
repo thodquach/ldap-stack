@@ -1,0 +1,13 @@
+dependencies:
+  - name: nginx-ldapauth-proxy
+    version: ^0.1.2
+    repository: file://charts/nginx-ldapauth-proxy
+    condition: nginx-ldapauth-proxy.enabled
+  - name: openldap
+    version: ^0.4.0
+    repository: file://charts/openldap
+    condition: openldap.enabled
+  - name: phpldapadmin
+    version: ^0.1.12
+    repository: file://charts/phpldapadmin
+    condition: phpldapadmin.enabled

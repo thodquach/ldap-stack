@@ -1,0 +1,12 @@
+# Default values for phpldapadmin
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+openldap:
+  enabled: true
+
+phpldapadmin:
+  enabled: true
+
+nginx-ldapauth-proxy:
+  enabled: true

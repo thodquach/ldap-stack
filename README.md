@@ -1,21 +1,38 @@
-# ldap-stack
-    ldap stack for authen proxy with nginx
-    Use ldap to store internal users, and use these users to authen by using nginx
-    to pass to your internal service
+# LDAP Stack Helm Chart
 
-# Start openldap
-    Start openldap with example.org
-    'example.org' is only a example, you can re-configure follow your domain ...
+## Prerequisites Details
+* Kubernetes 1.8+
+* PV support on the underlying infrastructure
 
-# Start phpldapadmin
-    Start phpldapadmin to connect ldap db, also configure user for ldap service
-    You need to using this 'phpldapadmin' to create a admin root -  and then create a security object
-    After that, you can use this security object to authen (user,pass) to pass yo your internal services
-    EX: I have capture a picture 'db-ldap-example.png' to show you the root of security object i have used to
-    authen to my internal service.
+## Chart Details
+This chart will do the following:
 
+* Instantiate an instance of OpenLDAP server
+* Instantiate an instance of PhpLdapAdmin connect to above OpenLDAP server
+* Instantiate an instance of Nginx using above OpenLDAP server to authenticate and proxy pass to the service you want to keep out of public internet
 
-# Start nginx proxy
-    Start nginx proxy and use user (security object) to authen to access the specific example subdomain you want
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```bash
+$ helm install --name ldap-stack .
+```
+
+## Flow of this helm chart
+
+* Start openldap:
+    Start openldap with 'example.org domain', but 'example.org' is only an example, you can re-configure follow your domain ...
+
+* Start phpldapadmin:
+    Start phpldapadmin to connect above openldap server, also configure user use for nginx authenticate
+    You need to using this 'phpldapadmin' to create a admin root - and then create a simple security object
+    After that, you can use this simple security object to authen (user, pass) to pass yo your internal service
+    EX: I have capture some pictures in images directory to demonstrate the root of security object i have used to
+    authenticate to internal service.
+
+* Start nginx proxy
+    Start nginx proxy and use user (the simple security object) to authenticate and access the specific internal service you configre.
 
 # NOTES:
+

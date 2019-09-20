@@ -1,0 +1,31 @@
+{{- if .Values.ingress.enabled -}}
+{{- $serviceName := include "phpldapadmin.fullname" . -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "phpldapadmin.fullname" . }}
+  labels:
+    app: {{ template "phpldapadmin.name" . }}
+    chart: {{ template "phpldapadmin.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          - path: {{ .path | default "/" }}
+            backend:
+              serviceName: {{ $serviceName }}
+              servicePort: http
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}

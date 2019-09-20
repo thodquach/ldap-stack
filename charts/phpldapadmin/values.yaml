@@ -1,0 +1,48 @@
+# Default values for phpldapadmin
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: osixia/phpldapadmin
+  tag: 0.7.2
+  pullPolicy: IfNotPresent
+
+deployment:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+service:
+  annotations: {}
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: phpldapadmin-dev.xxxxxx.com
+      path: /
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+# username: cn = admin, dc = example, dc = org
+# password: in openldap secret
+ldap:
+  host: ldap://ldap-stack-openldap:389
+
+limits:
+  cpu: 100m
+  memory: 256Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
