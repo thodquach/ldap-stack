@@ -13,7 +13,7 @@ This chart will do the following:
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `ldap-stack`:
 
 ```bash
 $ helm install --name ldap-stack .
